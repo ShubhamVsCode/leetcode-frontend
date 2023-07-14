@@ -135,7 +135,7 @@ const AdminRTEPage = () => {
             <Label htmlFor="description">Description</Label>
           </div>
           <div className="mt-2 relative group">
-            <ShowHTML plainText={watch("description")} />
+            <ShowHTML height="min-h-[100px]" plainText={watch("description")} />
             <div className="absolute bottom-2 left-2 opacity-0 group-hover:opacity-100 duration-200">
               <Model
                 field={"Description"}
@@ -229,6 +229,7 @@ const AdminRTEPage = () => {
                     <div className="flex gap-4 relative group">
                       <div className="flex-1">
                         <ShowHTML
+                          height="min-h-[100px]"
                           plainText={watch(`constraints.${index}.constraint`)}
                         />
                       </div>
@@ -287,6 +288,7 @@ const AdminRTEPage = () => {
                         <Label>Input</Label>
                         <div className="group relative">
                           <ShowHTML
+                            height="min-h-[100px]"
                             plainText={watch(`examples.${index}.input`)}
                           />
                           <div className="absolute bottom-2 left-2 opacity-0 group-hover:opacity-100 duration-200">
@@ -303,8 +305,9 @@ const AdminRTEPage = () => {
 
                       <div>
                         <Label>Output</Label>
-                        <div className="group relative">
+                        <div className="group relative ">
                           <ShowHTML
+                            height="min-h-[100px]"
                             plainText={watch(`solutions.${index}.solution`)}
                           />
                           <div className="absolute bottom-2 left-2 opacity-0 group-hover:opacity-100 duration-200">
@@ -362,6 +365,7 @@ const AdminRTEPage = () => {
                     <div className="flex gap-4">
                       <div className="group relative flex-1">
                         <ShowHTML
+                          height="min-h-[100px]"
                           plainText={watch(`solutions.${index}.solution`)}
                         />
                         <div className="absolute bottom-2 left-2 opacity-0 group-hover:opacity-100 duration-200">

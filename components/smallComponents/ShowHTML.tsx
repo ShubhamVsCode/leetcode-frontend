@@ -21,9 +21,9 @@ const ShowHTML = ({
       dangerouslySetInnerHTML={{
         __html: parseHTML(plainText || initialText).innerHTML,
       }}
-      className={`bg-slate-100 rounded-md px-3 py-2 ${height ?? "min-h-fit"} ${
-        !plainText && "italic text-sm text-black/50"
-      }`}
+      className={`bg-slate-100 dark:bg-slate-900 dark:text-white/50 rounded-md px-3 py-2 ${
+        height ?? "min-h-fit"
+      } ${!plainText && "italic text-sm text-black/50"}`}
     ></div>
   );
 };

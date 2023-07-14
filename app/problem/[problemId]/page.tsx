@@ -7,6 +7,7 @@ import { ThumbsUpIcon, ThumbsDownIcon } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import CodePlayground from "@/components/CodePlayground";
+import ShowHTML from "@/components/smallComponents/ShowHTML";
 
 const Problem = async ({
   params: { problemId },
@@ -44,21 +45,26 @@ const Problem = async ({
           </Button>
         </div>
 
-        <p>{problem?.description}</p>
+        <div>
+          <ShowHTML plainText={problem?.description} height="h-fit" />
+        </div>
 
         <section>
           {problem?.examples?.map(
-            (example: { input: String; output: String }, index: number) => {
+            (example: { input: string; output: string }, index: number) => {
               return (
                 <div className="mb-3">
                   <p>Example {index + 1}:</p>
                   <div className="bg-slate-100 px-2 py-2 rounded-md">
-                    <pre>
+                    {/* <pre>
                       <code>Input: {example.input}</code>
-                    </pre>
-                    <pre>
+                    </pre> */}
+
+                    <ShowHTML plainText={"Input: " + example.input} />
+                    {/* <pre>
                       <code>Output: {example.output}</code>
-                    </pre>
+                    </pre> */}
+                    <ShowHTML plainText={"Output: " + example.output} />
                   </div>
                 </div>
               );
@@ -68,10 +74,14 @@ const Problem = async ({
 
         <section>
           <h3>Constraints:</h3>
-          <ul className="list-disc list-inside">
+          <ul className="list-disc list-outside ml-5 space-y-2">
             {problem?.constraints?.map(
-              ({ constraint }: { constraint: String }) => {
-                return <li>{constraint}</li>;
+              ({ constraint }: { constraint: string }) => {
+                return (
+                  <li>
+                    <ShowHTML plainText={constraint} />
+                  </li>
+                );
               }
             )}
           </ul>

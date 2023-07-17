@@ -14,7 +14,7 @@ export function ModeToggle() {
 
   useEffect(() => {
     setTheme(toggleValue);
-  }, [toggleValue]);
+  }, [toggleValue, setTheme]);
 
   return (
     <Button variant="outline" size="icon" onClick={() => toggle()}>

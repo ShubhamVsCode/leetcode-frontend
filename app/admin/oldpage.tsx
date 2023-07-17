@@ -227,7 +227,7 @@ export default function InputForm() {
           <Button type="submit">Submit</Button>
         </form>
       </Form>
-      <TextEditor hideToolbar={hideAllToolbar} />
+      {/* <TextEditor  hideToolbar={hideAllToolbar} /> */}
     </main>
   );
 }

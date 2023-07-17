@@ -104,7 +104,7 @@ const Problem = async ({
             {problem?.constraints?.map(
               ({ constraint }: { constraint: string }) => {
                 return (
-                  <li className={constraint}>
+                  <li key={constraint}>
                     <ShowHTML width="w-fit" plainText={constraint} />
                   </li>
                 );

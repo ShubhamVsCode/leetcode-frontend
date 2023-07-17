@@ -46,25 +46,46 @@ const Problem = async ({
         </div>
 
         <div>
-          <ShowHTML plainText={problem?.description} height="h-fit" />
+          <ShowHTML
+            noStyle={true}
+            plainText={problem?.description}
+            height="h-fit"
+          />
         </div>
 
         <section>
           {problem?.examples?.map(
-            (example: { input: string; output: string }, index: number) => {
+            (
+              example: { input: string; output: string; explanation: string },
+              index: number
+            ) => {
               return (
                 <div className="mb-3">
                   <p>Example {index + 1}:</p>
-                  <div className="bg-slate-100 px-2 py-2 rounded-md">
-                    {/* <pre>
-                      <code>Input: {example.input}</code>
-                    </pre> */}
-
-                    <ShowHTML plainText={"Input: " + example.input} />
-                    {/* <pre>
-                      <code>Output: {example.output}</code>
-                    </pre> */}
-                    <ShowHTML plainText={"Output: " + example.output} />
+                  <div className="bg-slate-100 dark:bg-transparent space-y-2 px-2 py-2 rounded-md">
+                    {example.input && (
+                      <pre>
+                        <code>Input: {example.input}</code>
+                      </pre>
+                    )}
+                    {/* <ShowHTML
+                      width="w-fit"
+                      plainText={"Input: " + example.input}
+                    /> */}
+                    {example.output && (
+                      <pre>
+                        <code>Output: {example.output}</code>
+                      </pre>
+                    )}
+                    {/* <ShowHTML
+                      width="w-fit"
+                      plainText={"Output: " + example.output}
+                    /> */}
+                    {example.explanation && (
+                      <pre>
+                        <code>Explanation: {example.explanation}</code>
+                      </pre>
+                    )}
                   </div>
                 </div>
               );
@@ -79,7 +100,7 @@ const Problem = async ({
               ({ constraint }: { constraint: string }) => {
                 return (
                   <li>
-                    <ShowHTML plainText={constraint} />
+                    <ShowHTML width="w-fit" plainText={constraint} />
                   </li>
                 );
               }

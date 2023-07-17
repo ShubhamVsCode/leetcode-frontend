@@ -25,7 +25,7 @@ export default function RootLayout({
       <title>Leetcode</title>
       <body className={inter.className}>
         <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
-          <div className="absolute left-3 bottom-3 z-20">
+          <div className="fixed left-3 bottom-3 z-20">
             <ModeToggle />
           </div>
           {children}

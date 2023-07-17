@@ -16,11 +16,13 @@ import { AxiosError } from "axios";
 import { useEffect, useState } from "react";
 import { Model } from "@/components/Model";
 import ShowHTML from "@/components/smallComponents/ShowHTML";
+import { Switch } from "@/components/ui/switch";
 
 const AdminRTEPage = () => {
   const ExampleSchema = z.object({
     input: z.string(),
     output: z.string(),
+    explanation: z.string(),
   });
 
   const TagSchema = z.object({
@@ -38,6 +40,12 @@ const AdminRTEPage = () => {
     constraint: z.string(),
   });
 
+  const TestCasesSchema = z.object({
+    input: z.string(),
+    output: z.string(),
+    visibility: z.string().default("public"),
+  });
+
   const FormSchema = z.object({
     title: z.string().min(2, {
       message: "Title must be at least 2 characters.",
@@ -50,6 +58,7 @@ const AdminRTEPage = () => {
     examples: z.array(ExampleSchema),
     solutions: z.array(SolutionsSchema),
     constraints: z.array(ConstraintsSchema),
+    testCases: z.array(TestCasesSchema),
   });
 
   const {
@@ -68,8 +77,12 @@ const AdminRTEPage = () => {
       difficulty: "Medium",
       tags: [{ label: "", value: "" }],
       constraints: [{ constraint: "" }],
-      examples: [{ input: "", output: "" }],
+      examples: [{ input: "", output: "", explanation: "" }],
       solutions: [{ solution: "", upvote: 0, downvote: 0 }],
+      testCases: [
+        { input: "", output: "", visibility: "public" },
+        { input: "", output: "", visibility: "private" },
+      ],
     },
   });
 
@@ -77,6 +90,10 @@ const AdminRTEPage = () => {
   const examplesFieldArray = useFieldArray({ name: "examples", control });
   const solutionsFieldArray = useFieldArray({ name: "solutions", control });
   const constraintsFieldArray = useFieldArray({ name: "constraints", control });
+  const testCasesFieldArray = useFieldArray({
+    name: "testCases",
+    control,
+  });
 
   const onSubmit = async (data: z.infer<typeof FormSchema>) => {
     toast({
@@ -87,18 +104,6 @@ const AdminRTEPage = () => {
         </pre>
       ),
     });
-
-    // const response = await fetch("http://localhost:4000/api/problem", {
-    //   body: JSON.stringify(data),
-    //   method: "POST",
-    //   headers: {
-    //     "Content-Type": "application/json",
-    //   },
-    // });
-
-    // const result = await response.json();
-    // toast({ title: result });
-    return;
 
     const response = await AXIOS_API.post("/problem", data)
       .then((res) => res.data)
@@ -171,9 +176,245 @@ const AdminRTEPage = () => {
             </>
           </Tabs>
         </div>
+
+        <div>
+          <Label>Examples</Label>
+          <div className="">
+            <div className="grid gap-x-10 gap-y-3 flex-1">
+              {examplesFieldArray.fields.map(({ id, input }, index, array) => {
+                return (
+                  <div className="flex relative">
+                    <div className="flex-1 grid grid-cols-3 gap-4">
+                      <div>
+                        <Label>Input</Label>
+                        <div className="group relative">
+                          {/* <ShowHTML
+                            height="min-h-[100px]"
+                            plainText={watch(`examples.${index}.input`)}
+                          />
+                          <div className="absolute bottom-2 left-2 opacity-0 group-hover:opacity-100 duration-200">
+                            <Model
+                              field={"Example Input: " + (index + 1)}
+                              state={watch(`examples.${index}.input`)}
+                              setState={(value) =>
+                                setValue(`examples.${index}.input`, value)
+                              }
+                            />
+                          </div> */}
+                        </div>
+                        <Textarea {...register(`examples.${index}.input`)} />
+                      </div>
+
+                      <div>
+                        <Label>Output</Label>
+                        <div className="group relative ">
+                          {/* <ShowHTML
+                            height="min-h-[100px]"
+                            plainText={watch(`examples.${index}.output`)}
+                          />
+                          <div className="absolute bottom-2 left-2 opacity-0 group-hover:opacity-100 duration-200">
+                            <Model
+                              field={"Example Output: " + (index + 1)}
+                              state={watch(`examples.${index}.output`)}
+                              setState={(value) =>
+                                setValue(`examples.${index}.output`, value)
+                              }
+                            />
+                          </div> */}
+                          <Textarea {...register(`examples.${index}.output`)} />
+                        </div>
+                      </div>
+
+                      <div>
+                        <Label>Explanation</Label>
+                        <div className="group relative ">
+                          {/* <ShowHTML
+                            height="min-h-[100px]"
+                            plainText={watch(`examples.${index}.explanation`)}
+                          />
+                          <div className="absolute bottom-2 left-2 opacity-0 group-hover:opacity-100 duration-200">
+                            <Model
+                              field={"Example Explanation: " + (index + 1)}
+                              state={watch(`examples.${index}.explanation`)}
+                              setState={(value) =>
+                                setValue(`examples.${index}.explanation`, value)
+                              }
+                            />
+                          </div> */}
+                          <Textarea
+                            {...register(`examples.${index}.explanation`)}
+                          />
+                        </div>
+                      </div>
+                    </div>
+                    <div className="mt-6 ml-2">
+                      {array.length > 1 && (
+                        <Button
+                          type="button"
+                          onClick={() => examplesFieldArray.remove(index)}
+                          variant={"outline"}
+                          className="text-red-500"
+                        >
+                          <Trash2Icon />
+                        </Button>
+                      )}
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+
+            <Button
+              type="button"
+              onClick={() => {
+                examplesFieldArray.append({
+                  input: "",
+                  output: "",
+                  explanation: "",
+                });
+              }}
+              className="mt-3 border border-black/10"
+              variant={"secondary"}
+            >
+              Add Examples
+            </Button>
+          </div>
+        </div>
+
+        <div>
+          <Label>Solutions</Label>
+          <div className="">
+            <div className="grid gap-x-10 gap-y-3 flex-1">
+              {solutionsFieldArray.fields.map(
+                ({ id, solution }, index, array) => {
+                  return (
+                    <div className="flex gap-4">
+                      <div className="group relative flex-1">
+                        <ShowHTML
+                          height="min-h-[100px]"
+                          plainText={watch(`solutions.${index}.solution`)}
+                        />
+                        <div className="absolute bottom-2 left-2 opacity-0 group-hover:opacity-100 duration-200">
+                          <Model
+                            field={"Solution"}
+                            state={watch(`solutions.${index}.solution`)}
+                            setState={(value) =>
+                              setValue(`solutions.${index}.solution`, value)
+                            }
+                          />
+                        </div>
+
+                        <div className="absolute bottom-2 right-2 opacity-0 group-hover:opacity-100 duration-200">
+                          {array.length > 1 && (
+                            <Button
+                              type="button"
+                              onClick={() => solutionsFieldArray.remove(index)}
+                              variant={"outline"}
+                              className="text-red-500"
+                            >
+                              <Trash2Icon />
+                            </Button>
+                          )}
+                        </div>
+                      </div>
+                    </div>
+                  );
+                }
+              )}
+            </div>
+
+            <Button
+              type="button"
+              onClick={() => {
+                solutionsFieldArray.append({
+                  solution: "",
+                  downvote: 0,
+                  upvote: 0,
+                });
+              }}
+              className="mt-3 border border-black/10"
+              variant={"secondary"}
+            >
+              Add Solutions
+            </Button>
+          </div>
+        </div>
+
+        <div>
+          <Label>TestCases</Label>
+          <div className="">
+            <div className="grid gap-x-10 gap-y-3 flex-1">
+              {testCasesFieldArray.fields.map(
+                ({ id, input, output, visibility }, index, array) => {
+                  return (
+                    <div className="flex relative">
+                      <div className="flex-1 grid grid-cols-2 gap-4">
+                        <div>
+                          <Label>Input</Label>
+                          <div className="group relative">
+                            <Input
+                              type="text"
+                              {...register(`testCases.${index}.input`)}
+                            />
+                          </div>
+                        </div>
+
+                        <div>
+                          <Label>Output</Label>
+                          <div className="group relative ">
+                            <Input
+                              type="text"
+                              {...register(`testCases.${index}.output`)}
+                            />
+                          </div>
+                        </div>
+                      </div>
+                      <div className="mt-6 ml-2">
+                        <div className="flex items-center space-x-2">
+                          <Switch
+                            id={`testCases.${index}.visibility`}
+                            {...register(`testCases.${index}.visibility`)}
+                          />
+                          <Label htmlFor={`testCases.${index}.visibility`}>
+                            Visibility: {visibility}
+                          </Label>
+                        </div>
+                        {array.length > 1 && (
+                          <Button
+                            type="button"
+                            onClick={() => testCasesFieldArray.remove(index)}
+                            variant={"outline"}
+                            className="text-red-500"
+                          >
+                            <Trash2Icon />
+                          </Button>
+                        )}
+                      </div>
+                    </div>
+                  );
+                }
+              )}
+            </div>
+
+            <Button
+              type="button"
+              onClick={() => {
+                testCasesFieldArray.append({
+                  input: "",
+                  output: "",
+                  visibility: "public",
+                });
+              }}
+              className="mt-3 border border-black/10"
+              variant={"secondary"}
+            >
+              Add TestCases
+            </Button>
+          </div>
+        </div>
+
         <div className="">
           <Label htmlFor="tags">Tags</Label>
-
           <div className="">
             <div className="grid grid-cols-4 gap-x-10 gap-y-3 flex-1">
               {tagsFieldArray.fields.map(
@@ -276,145 +517,7 @@ const AdminRTEPage = () => {
           </div>
         </div>
 
-        <div>
-          <Label>Examples</Label>
-          <div className="">
-            <div className="grid gap-x-10 gap-y-3 flex-1">
-              {examplesFieldArray.fields.map(({ id, input }, index, array) => {
-                return (
-                  <div className="flex relative">
-                    <div className="flex-1 grid grid-cols-2 gap-4">
-                      <div>
-                        <Label>Input</Label>
-                        <div className="group relative">
-                          <ShowHTML
-                            height="min-h-[100px]"
-                            plainText={watch(`examples.${index}.input`)}
-                          />
-                          <div className="absolute bottom-2 left-2 opacity-0 group-hover:opacity-100 duration-200">
-                            <Model
-                              field={"Example Input: " + (index + 1)}
-                              state={watch(`examples.${index}.input`)}
-                              setState={(value) =>
-                                setValue(`examples.${index}.input`, value)
-                              }
-                            />
-                          </div>
-                        </div>
-                      </div>
-
-                      <div>
-                        <Label>Output</Label>
-                        <div className="group relative ">
-                          <ShowHTML
-                            height="min-h-[100px]"
-                            plainText={watch(`solutions.${index}.solution`)}
-                          />
-                          <div className="absolute bottom-2 left-2 opacity-0 group-hover:opacity-100 duration-200">
-                            <Model
-                              field={"Example Output: " + (index + 1)}
-                              state={watch(`solutions.${index}.solution`)}
-                              setState={(value) =>
-                                setValue(`solutions.${index}.solution`, value)
-                              }
-                            />
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                    <div className="mt-6 ml-2">
-                      {array.length > 1 && (
-                        <Button
-                          type="button"
-                          onClick={() => examplesFieldArray.remove(index)}
-                          variant={"outline"}
-                          className="text-red-500"
-                        >
-                          <Trash2Icon />
-                        </Button>
-                      )}
-                    </div>
-                  </div>
-                );
-              })}
-            </div>
-
-            <Button
-              type="button"
-              onClick={() => {
-                examplesFieldArray.append({
-                  input: "",
-                  output: "",
-                });
-              }}
-              className="mt-3 border border-black/10"
-              variant={"secondary"}
-            >
-              Add Examples
-            </Button>
-          </div>
-        </div>
-
-        <div>
-          <Label>Solutions</Label>
-          <div className="">
-            <div className="grid gap-x-10 gap-y-3 flex-1">
-              {solutionsFieldArray.fields.map(
-                ({ id, solution }, index, array) => {
-                  return (
-                    <div className="flex gap-4">
-                      <div className="group relative flex-1">
-                        <ShowHTML
-                          height="min-h-[100px]"
-                          plainText={watch(`solutions.${index}.solution`)}
-                        />
-                        <div className="absolute bottom-2 left-2 opacity-0 group-hover:opacity-100 duration-200">
-                          <Model
-                            field={"Solution"}
-                            state={watch(`solutions.${index}.solution`)}
-                            setState={(value) =>
-                              setValue(`solutions.${index}.solution`, value)
-                            }
-                          />
-                        </div>
-
-                        <div className="absolute bottom-2 right-2 opacity-0 group-hover:opacity-100 duration-200">
-                          {array.length > 1 && (
-                            <Button
-                              type="button"
-                              onClick={() => solutionsFieldArray.remove(index)}
-                              variant={"outline"}
-                              className="text-red-500"
-                            >
-                              <Trash2Icon />
-                            </Button>
-                          )}
-                        </div>
-                      </div>
-                    </div>
-                  );
-                }
-              )}
-            </div>
-
-            <Button
-              type="button"
-              onClick={() => {
-                solutionsFieldArray.append({
-                  solution: "",
-                  downvote: 0,
-                  upvote: 0,
-                });
-              }}
-              className="mt-3 border border-black/10"
-              variant={"secondary"}
-            >
-              Add Solutions
-            </Button>
-          </div>
-        </div>
-
-        {/* <DevTool control={control} /> */}
+        <DevTool control={control} placement="top-left" />
         <Button>Submit</Button>
       </form>
     </main>

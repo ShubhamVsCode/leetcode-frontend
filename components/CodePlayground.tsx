@@ -9,12 +9,20 @@ import {
   githubDarkInit,
 } from "@uiw/codemirror-theme-github";
 
-import { useCallback } from "react";
+import { useCallback, useState } from "react";
+import { Button } from "./ui/button";
 
 const CodePlayground = () => {
+  const [code, setCode] = useState<string>("");
   const onChange = useCallback((value: any, viewUpdate: any) => {
-    console.log("value:", value);
+    // console.log("value:", value);
+    // console.log("viewUpdate:", viewUpdate);
+    setCode(value);
   }, []);
+
+  const onRun = (): void => {
+    console.log("Ran", eval(code));
+  };
 
   return (
     <div>
@@ -30,6 +38,8 @@ const CodePlayground = () => {
           fontSize: 20,
         }}
       />
+
+      <Button onClick={() => onRun()}>Run</Button>
     </div>
   );
 };

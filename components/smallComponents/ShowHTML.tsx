@@ -26,7 +26,7 @@ const ShowHTML = ({
     return (
       <div
         dangerouslySetInnerHTML={{
-          __html: parseHTML(plainText || initialText).innerHTML,
+          __html: parseHTML(plainText || initialText),
         }}
         className={`
               ${!plainText && "italic text-sm text-black/50"}
@@ -39,7 +39,7 @@ const ShowHTML = ({
   return (
     <div
       dangerouslySetInnerHTML={{
-        __html: parseHTML(plainText || initialText).innerHTML,
+        __html: parseHTML(plainText || initialText),
       }}
       className={`bg-slate-100 dark:bg-slate-900 dark:text-white/50 rounded-md px-3 py-2 ${
         height ?? "min-h-fit"

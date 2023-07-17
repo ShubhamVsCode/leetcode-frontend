@@ -1,7 +1,6 @@
 "use client";
-
-import { parseHTML } from "@/lib/utils";
 import React from "react";
+import parse from "html-react-parser";
 
 const ShowHTML = ({
   plainText,
@@ -25,22 +24,18 @@ const ShowHTML = ({
   if (noStyle === true) {
     return (
       <div
-        dangerouslySetInnerHTML={{
-          __html: parseHTML(plainText || initialText),
-        }}
         className={`
               ${!plainText && "italic text-sm text-black/50"}
               ${className}
               `}
-      ></div>
+      >
+        {parse(plainText || initialText)}
+      </div>
     );
   }
 
   return (
     <div
-      dangerouslySetInnerHTML={{
-        __html: parseHTML(plainText || initialText),
-      }}
       className={`bg-slate-100 dark:bg-slate-900 dark:text-white/50 rounded-md px-3 py-2 ${
         height ?? "min-h-fit"
       } 
@@ -48,7 +43,9 @@ const ShowHTML = ({
       ${width}
       ${className}
       `}
-    ></div>
+    >
+      {parse(plainText || initialText)}
+    </div>
   );
 };
 

@@ -216,7 +216,7 @@ export default function InputForm() {
                 <FormControl>
                   <>
                     {fields.map(({ input, output, id }) => {
-                      return <Textarea placeholder="Tag" />;
+                      return <Textarea key={id} placeholder="Tag" />;
                     })}
                   </>
                 </FormControl>

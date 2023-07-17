@@ -183,7 +183,7 @@ const AdminRTEPage = () => {
             <div className="grid gap-x-10 gap-y-3 flex-1">
               {examplesFieldArray.fields.map(({ id, input }, index, array) => {
                 return (
-                  <div className="flex relative">
+                  <div className="flex relative" key={id}>
                     <div className="flex-1 grid grid-cols-3 gap-4">
                       <div>
                         <Label>Input</Label>
@@ -288,7 +288,7 @@ const AdminRTEPage = () => {
               {solutionsFieldArray.fields.map(
                 ({ id, solution }, index, array) => {
                   return (
-                    <div className="flex gap-4">
+                    <div className="flex gap-4" key={id}>
                       <div className="group relative flex-1">
                         <ShowHTML
                           height="min-h-[100px]"
@@ -347,7 +347,7 @@ const AdminRTEPage = () => {
               {testCasesFieldArray.fields.map(
                 ({ id, input, output, visibility }, index, array) => {
                   return (
-                    <div className="flex relative">
+                    <div className="flex relative" key={id}>
                       <div className="flex-1 grid grid-cols-2 gap-4">
                         <div>
                           <Label>Input</Label>
@@ -420,7 +420,7 @@ const AdminRTEPage = () => {
               {tagsFieldArray.fields.map(
                 ({ id, label, value }, index, array) => {
                   return (
-                    <div className="flex gap-4">
+                    <div className="flex gap-4" key={id}>
                       <Input
                         key={id}
                         type="text"
@@ -467,7 +467,7 @@ const AdminRTEPage = () => {
               {constraintsFieldArray.fields.map(
                 ({ id, constraint }, index, array) => {
                   return (
-                    <div className="flex gap-4 relative group">
+                    <div className="flex gap-4 relative group" key={id}>
                       <div className="flex-1">
                         <ShowHTML
                           height="min-h-[100px]"

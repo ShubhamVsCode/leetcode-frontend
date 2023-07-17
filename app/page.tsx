@@ -10,7 +10,7 @@ export default async function Home() {
 
       {response?.data?.problems?.map((problem: any, index: number) => {
         return (
-          <div>
+          <div key={problem?._id}>
             {index + 1}).
             <Link href={`/problem/${problem?._id}`}>{problem?.title}</Link>
           </div>

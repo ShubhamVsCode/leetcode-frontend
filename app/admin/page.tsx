@@ -161,7 +161,7 @@ const AdminIndexPage = () => {
               {tagsFieldArray.fields.map(
                 ({ id, label, value }, index, array) => {
                   return (
-                    <div className="flex gap-4">
+                    <div className="flex gap-4" key={id}>
                       <Input
                         key={id}
                         type="text"
@@ -208,7 +208,7 @@ const AdminIndexPage = () => {
               {constraintsFieldArray.fields.map(
                 ({ id, constraint }, index, array) => {
                   return (
-                    <div className="flex gap-4">
+                    <div className="flex gap-4" key={id}>
                       <Input
                         key={id}
                         type="text"
@@ -253,7 +253,7 @@ const AdminIndexPage = () => {
             <div className="grid gap-x-10 gap-y-3 flex-1">
               {examplesFieldArray.fields.map(({ id, input }, index, array) => {
                 return (
-                  <div className="flex gap-4">
+                  <div className="flex gap-4" key={id}>
                     <Label>Input</Label>
                     <Textarea
                       key={id}
@@ -306,7 +306,7 @@ const AdminIndexPage = () => {
               {solutionsFieldArray.fields.map(
                 ({ id, solution }, index, array) => {
                   return (
-                    <div className="flex gap-4">
+                    <div className="flex gap-4" key={id}>
                       <Textarea
                         key={id}
                         id="solutions"

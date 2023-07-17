@@ -56,11 +56,16 @@ const Problem = async ({
         <section>
           {problem?.examples?.map(
             (
-              example: { input: string; output: string; explanation: string },
+              example: {
+                input: string;
+                output: string;
+                explanation: string;
+                _id: string;
+              },
               index: number
             ) => {
               return (
-                <div className="mb-3">
+                <div className="mb-3" key={example._id}>
                   <p>Example {index + 1}:</p>
                   <div className="bg-slate-100 dark:bg-transparent space-y-2 px-2 py-2 rounded-md">
                     {example.input && (
@@ -99,7 +104,7 @@ const Problem = async ({
             {problem?.constraints?.map(
               ({ constraint }: { constraint: string }) => {
                 return (
-                  <li>
+                  <li className={constraint}>
                     <ShowHTML width="w-fit" plainText={constraint} />
                   </li>
                 );
